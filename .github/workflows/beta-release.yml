@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Merge - Dispatch event
         run: |
-          curl -X POST https://api.github.com/repos/diviproject/repo2/dispatches \
+          curl -X POST https://api.github.com/repos/gemerich/repo2 \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "merge-dev-to-beta", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
