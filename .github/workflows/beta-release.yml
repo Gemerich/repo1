@@ -1,0 +1,33 @@
+# References:
+## https://github.com/marketplace/actions/merge-conflict-finder
+## https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
+## https://github.com/marketplace/actions/merge-branch
+
+name: Beta Release
+
+on:
+  push:
+    tags: [v-beta-release*]
+  repository_dispatch:
+
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Merge development -> beta
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: development
+          target_branch: beta
+          github_token: ${{ github.token }}
+  dispatch-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge - Dispatch event
+        run: |
+          curl -X POST https://api.github.com/repos/diviproject/repo2/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "merge-dev-to-beta", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
