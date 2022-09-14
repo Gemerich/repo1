@@ -17,9 +17,9 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ github.token }}
-          repo: repository-name
-          owner: repository-owner
-          workflow: automation-test.yml
+          repo: repo2
+          owner: gemerich
+          workflow: new-release.yml
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
