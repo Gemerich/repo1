@@ -36,19 +36,19 @@ jobs:
 
       - name: Merges branches
         uses: codex-/return-dispatch@v1
-        id: return_dispatch
+        id: return_dispatch2
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           ref: ${{ github.ref }}
           repo: repo2
           owner: gemerich
           workflow: merge-beta.yml
-      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
+      - name: Await Run ID ${{ steps.return_dispatch2.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           repo: repo2
           owner: gemerich
-          run_id: ${{ steps.return_dispatch.outputs.run_id }}
+          run_id: ${{ steps.return_dispatch2.outputs.run_id }}
           run_timeout_seconds: 300 # Optional
           poll_interval_ms: 5000 # Optional
