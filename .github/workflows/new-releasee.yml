@@ -28,8 +28,8 @@ jobs:
         uses: Codex-/await-remote-run@v1.0.0
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          repo: return-dispatch
-          owner: codex-
+          repo: repo2
+          owner: gemerich
           run_id: ${{ steps.return_dispatch.outputs.run_id }}
           run_timeout_seconds: 300 # Optional
           poll_interval_ms: 5000 # Optional
