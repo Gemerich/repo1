@@ -7,6 +7,22 @@ name: New Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        type: choice
+        description: Release type
+        required: true
+        options: 
+        - beta
+        - production
+      use-emoji:
+        type: boolean
+        description: Include  emojis
+        required: true
+      environment:
+        type: environment
+        description: env
+        required: true
 
 permissions: 
   actions: read
