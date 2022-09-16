@@ -36,7 +36,7 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
           workflow: new-release.yml
