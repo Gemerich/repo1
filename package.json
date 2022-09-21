@@ -1,6 +1,6 @@
 {
   "name": "divi-pay-api",
-  "version": "0.0.125",
+  "version": "0.0.136",
   "description": "",
   "main": "index.js",
   "scripts": {
