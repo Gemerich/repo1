@@ -38,7 +38,7 @@ fi
 
 # echo the new version number
 newversion=${major}.${minor}.${revision}${build}
-echo "new version: ${newversion} $2"
+echo "new version: ${newversion} $1"
 
 search='("version":[[:space:]]*").+(")'
 replace="\1${newversion}\2"
