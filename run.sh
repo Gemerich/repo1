@@ -19,13 +19,9 @@ fi
 
 release=$1
 
-if [ -d ".git" ]; then
-    bump "bower.json"
-    git add .
-    git commit -m "Bump to ${version}"
-    git tag -a "${output}" -m "${version}"
-    git push origin --tags
-    npm publish ./
-else
-    bump "bower.json"
-fi
+bump "package.json"
+git add .
+git commit -m "Bump to ${version}"
+git tag -a "${output}" -m "${version}"
+git push origin --tags
+npm publish ./
