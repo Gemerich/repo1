@@ -1,5 +1,3 @@
-# sed -n "s/version\":[[:space:]]*\"//p" package.json
-
 version=$(sed -n "s/version\":[[:space:]]*\"//p" package.json)
 major=0
 minor=0
@@ -16,31 +14,28 @@ if [[ $version =~ $regex ]]; then
 fi
 
 # check paramater to see which number to increment
-if [[ "$1" == "major" ]]; then
+if [[ "$2" == "major" ]]; then
     major=$(echo $major + 1 | bc)
     build=$(echo $build + 1 | bc)
     minor=0
     revision=00
-elif [[ "$1" == "minor" ]]; then
+elif [[ "$2" == "minor" ]]; then
     minor=$(echo $minor + 1 | bc)
     build=$(echo $build + 1 | bc)
     revision=00
-elif [[ "$1" == "revision" ]]; then
+elif [[ "$2" == "revision" ]]; then
     revision=$(echo $revision + 1 | bc)
     if (($revision < 10)); then
         revision="0${revision}"
     fi
     build=$(echo $build + 1 | bc)
-elif [[ "$1" == "build" ]]; then
+elif [[ "$2" == "build" ]]; then
     build=$(echo $build + 1 | bc)
-else
-    echo "usage: ./version.sh version_number [major/minor/revision/build]"
-    exit -1
 fi
 
 # echo the new version number
 newversion=${major}.${minor}.${revision}${build}
-echo "new version: ${newversion} $1"
+echo "new version: ${newversion} $2"
 
 search='("version":[[:space:]]*").+(")'
 replace="\1${newversion}\2"
@@ -50,5 +45,5 @@ rm "package.json.tmp"
 
 git add .
 git commit -m "Bump to ${newversion}"
-git tag "v-${newversion}"
+git tag "v-${1}-release-${newversion}"
 git push origin --tags
