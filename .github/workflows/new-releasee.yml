@@ -10,19 +10,20 @@ on:
     inputs:
       release:
         type: choice
-        description: Release type
+        description: Release type (If release is production build-type option will be ignored)
         required: true
         options:
           - beta
           - production
-      use-emoji:
-        type: boolean
-        description: Include  emojis
+      build-type:
+        type: choice
+        description: Build type
         required: true
-      environment:
-        type: environment
-        description: env
-        required: true
+        options:
+          - major
+          - minor
+          - revision
+          - build
 
 jobs:
   sync-branch:
@@ -92,3 +93,11 @@ jobs:
           run_id: ${{ steps.return_dispatch2.outputs.run_id }}
           run_timeout_seconds: 300 # Optional
           poll_interval_ms: 5000 # Optional
+  execute-tagging:
+    needs: [merge-branches]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables from project settings
+        run: |
+          exec run.sh ${{ github.event.inputs.release }}  ${{ github.event.inputs.release }} == 'beta' ? ${{ github.event.inputs.build-type }}  : ''
+          echo $PRODUCT_NAME
