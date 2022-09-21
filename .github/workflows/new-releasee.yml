@@ -3,7 +3,7 @@
 ## https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
 ## https://github.com/marketplace/actions/merge-branch
 
-name: New Release
+name: New Release 🚀
 
 on:
   workflow_dispatch:
