@@ -1,8 +1,8 @@
 
+# sed -n "s/version\":[[:space:]]*\"//p" package.json
 
-
-version=${sed -n "s/version\":[[:space:]]*\"//p" package.json | sed 's/[^0-9.]//g'}
-echo "$version"
+version=${ cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g'}
+echo "${version}"
 major=0
 minor=0
 revision=0
