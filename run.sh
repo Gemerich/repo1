@@ -17,19 +17,19 @@ if [[ $version =~ $regex ]]; then
 fi
 
 # check paramater to see which number to increment
-if [[ "$2" == "major" ]]; then
+if [[ "$1" == "major" ]]; then
     major=$(echo $major + 1 | bc)
     build=$(echo $build + 1 | bc)
     minor=0
     revision=00
-elif [[ "$2" == "minor" ]]; then
+elif [[ "$1" == "minor" ]]; then
     minor=$(echo $minor + 1 | bc)
     build=$(echo $build + 1 | bc)
     revision=00
-elif [[ "$2" == "revision" ]]; then
+elif [[ "$1" == "revision" ]]; then
     revision=$(echo $revision + 1 | bc)
     build=$(echo $build + 1 | bc)
-elif [[ "$2" == "build" ]]; then
+elif [[ "$1" == "build" ]]; then
     build=$(echo $build + 1 | bc)
 else
     echo "usage: ./version.sh version_number [major/minor/revision/build]"
