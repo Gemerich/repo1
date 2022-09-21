@@ -27,7 +27,7 @@ elif [[ "$1" == "minor" ]]; then
     revision=00
 elif [[ "$1" == "revision" ]]; then
     revision=$(echo $revision + 1 | bc)
-    if [[revision <10]]; then
+    if [[revision < 10]]; then
         revision="0${revision}"
         echo "${revision}"
     fi
