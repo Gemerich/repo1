@@ -2,6 +2,7 @@
 # sed -n "s/version\":[[:space:]]*\"//p" package.json
 
 version=sed -n "s/version\":[[:space:]]*\"//p" package.json
+echo "${version}"
 major=0
 minor=0
 revision=0
