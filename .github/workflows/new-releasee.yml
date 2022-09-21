@@ -1,0 +1,94 @@
+# References:
+## https://github.com/marketplace/actions/merge-conflict-finder
+## https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
+## https://github.com/marketplace/actions/merge-branch
+
+name: New Release •• 🚀 ••
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        type: choice
+        description: Release type
+        required: true
+        options:
+          - beta
+          - production
+      use-emoji:
+        type: boolean
+        description: Include  emojis
+        required: true
+      environment:
+        type: environment
+        description: env
+        required: true
+
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if mergeable •• 🚀 ••
+        uses: codex-/return-dispatch@v1
+        id: return_dispatch
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: refs/heads/${{ github.event.inputs.release }}
+          repo: repo2
+          owner: gemerich
+          workflow: new-release.yml
+      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
+        uses: Codex-/await-remote-run@v1.0.0
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repo: repo2
+          owner: gemerich
+          run_id: ${{ steps.return_dispatch.outputs.run_id }}
+          run_timeout_seconds: 300 # Optional
+          poll_interval_ms: 5000 # Optional
+  sync-branch2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if mergeable
+        uses: codex-/return-dispatch@v1
+        id: return_dispatch
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: refs/heads/${{ github.event.inputs.release }}
+          repo: repo2
+          owner: gemerich
+          workflow: new-release.yml
+      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
+        uses: Codex-/await-remote-run@v1.0.0
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repo: repo2
+          owner: gemerich
+          run_id: ${{ steps.return_dispatch.outputs.run_id }}
+          run_timeout_seconds: 300 # Optional
+          poll_interval_ms: 5000 # Optional
+  merge-branches:
+    needs: [sync-branch, sync-branch2]
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: http://google.com
+    steps:
+      - name: Merges branches •• 🚀 ••
+        uses: codex-/return-dispatch@v1
+        id: return_dispatch2
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: ${{ github.ref }}
+          repo: repo2
+          owner: gemerich
+          workflow: merge-beta.yml
+      - name: Await Run ID ${{ steps.return_dispatch2.outputs.run_id }}
+        uses: Codex-/await-remote-run@v1.0.0
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repo: repo2
+          owner: gemerich
+          run_id: ${{ steps.return_dispatch2.outputs.run_id }}
+          run_timeout_seconds: 300 # Optional
+          poll_interval_ms: 5000 # Optional
