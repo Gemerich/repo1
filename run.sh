@@ -1,4 +1,7 @@
-version="$1"
+
+# sed -n "s/version\":[[:space:]]*\"//p" package.json
+
+version=sed -n "s/version\":[[:space:]]*\"//p" package.json
 major=0
 minor=0
 revision=0
@@ -45,5 +48,5 @@ rm "package.json.tmp"
 
 git add .
 git commit -m "Bump to ${newversion}"
-git tag -a "v-${newversion}" -m "${newversion}"
+git tag "v-${newversion}"
 git push origin --tags
