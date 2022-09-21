@@ -4,7 +4,7 @@
 version=$(sed -n "s/version\":[[:space:]]*\"//p" package.json)
 major=0
 minor=0
-revision=0
+revision=00
 build=0
 
 # break down the version number into it's components
