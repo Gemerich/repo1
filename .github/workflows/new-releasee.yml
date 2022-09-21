@@ -97,7 +97,7 @@ jobs:
     needs: [merge-branches]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Set environment variables from project settings
         run: |
           exec run.sh ${{ github.event.inputs.release }}  ${{ github.event.inputs.release }} == 'beta' ? ${{ github.event.inputs.build-type }}  : ''
-          echo $PRODUCT_NAME
