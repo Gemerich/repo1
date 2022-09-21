@@ -47,4 +47,3 @@ git add .
 git commit -m "Bump to ${newversion}"
 git tag -a "v-${newversion}" -m "${newversion}"
 git push origin --tags
-npm publish ./
