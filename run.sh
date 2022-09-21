@@ -28,7 +28,8 @@ elif [[ "$1" == "minor" ]]; then
 elif [[ "$1" == "revision" ]]; then
     revision=$(echo $revision + 1 | bc)
     if [[revision <10]]; then
-    revision="0${revision}"
+        revision="0${revision}"
+        echo "${revision}"
     fi
     build=$(echo $build + 1 | bc)
 elif [[ "$1" == "build" ]]; then
