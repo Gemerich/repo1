@@ -1,10 +1,9 @@
-
 # sed -n "s/version\":[[:space:]]*\"//p" package.json
 
 version=$(sed -n "s/version\":[[:space:]]*\"//p" package.json)
 major=0
 minor=0
-revision=00
+revision=0
 build=0
 
 # break down the version number into it's components
@@ -28,6 +27,9 @@ elif [[ "$1" == "minor" ]]; then
     revision=00
 elif [[ "$1" == "revision" ]]; then
     revision=$(echo $revision + 1 | bc)
+    if [[revision <10]]; then
+    revision="0${revision}"
+    fi
     build=$(echo $build + 1 | bc)
 elif [[ "$1" == "build" ]]; then
     build=$(echo $build + 1 | bc)
