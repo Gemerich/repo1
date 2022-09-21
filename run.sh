@@ -1,5 +1,5 @@
 
-# sed -n "s/version\":[[:space:]]*\"//p" package.json
+sed -n "s/version\":[[:space:]]*\"//p" package.json
 
 version=${sed -n "s/version\":[[:space:]]*\"//p" package.json}
 echo "${version}"
