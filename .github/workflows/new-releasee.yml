@@ -102,4 +102,4 @@ jobs:
           fetch-depth: 0
       - name: Set environment variables from project settings
         run: |
-          exec run.sh ${{ github.event.inputs.release }}  ${{ github.event.inputs.release }} == 'beta' ? ${{ github.event.inputs.build-type }}  : ''
+          exec .github/scripts/run.sh ${{ github.event.inputs.release }}  ${{ github.event.inputs.release }} == 'beta' ? ${{ github.event.inputs.build-type }}  : ''
