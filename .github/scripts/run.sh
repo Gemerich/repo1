@@ -39,12 +39,14 @@ fi
 newversion=${major}.${minor}.${revision}${build}
 echo "new version: ${newversion} $2"
 
-search='("version":[[:space:]]*").+(")'
+search="("version":[[:space:]]*").+(")"
 replace="\1${newversion}\2"
 
 sed -i ".tmp" -E "s/${search}/${replace}/g" "package.json"
 rm "package.json.tmp"
 
+git config user.name github-actions
+git config user.email github-actions@github.com
 git add .
 git commit -m "Bump to ${newversion}"
 git tag "v-${1}-release-${newversion}"
