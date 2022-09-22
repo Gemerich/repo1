@@ -39,8 +39,8 @@ fi
 newversion=${major}.${minor}.${revision}${build}
 echo "new version: ${newversion} $2"
 
-sed -i '.tmp' -E 's/("version":[[:space:]]*").+(")/\1${newversion}\2/g' 'package.json'
-rm 'package.json.tmp'
+sed -i '.tmp' -E "s/(\"version\":[[:space:]]*\").+(\")/\1${newversion}\2/g" "package.json"
+rm "package.json.tmp"
 
 git config user.name github-actions
 git config user.email github-actions@github.com
