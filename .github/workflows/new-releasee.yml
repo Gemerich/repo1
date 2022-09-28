@@ -73,9 +73,6 @@ jobs:
   merge-branches:
     needs: [sync-branch, sync-branch2]
     runs-on: ubuntu-latest
-    environment:
-      name: development
-      url: http://google.com
     steps:
       - name: Merges branches •• 🚀 ••
         uses: codex-/return-dispatch@v1
@@ -110,8 +107,8 @@ jobs:
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
-  update-version:
-    needs: [sync-branch, sync-branch2]
+  update-version-other-repos:
+    needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.release }}
@@ -126,7 +123,7 @@ jobs:
           repo: repo2
           owner: gemerich
           workflow: final-step.yml
-          workflow_inputs: '{ "version_number": ${{ env.version-number }} }'
+          workflow_inputs: '{ "version_number": "${{ env.version-number }}" }'
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
