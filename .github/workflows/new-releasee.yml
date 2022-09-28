@@ -8,13 +8,6 @@ name: New Release •• 🚀 ••
 on:
   workflow_dispatch:
     inputs:
-      release:
-        type: choice
-        description: Release type (If release is production build-type option will be ignored)
-        required: true
-        options:
-          - beta
-          - production
       build-type:
         type: choice
         description: Build type
@@ -24,6 +17,8 @@ on:
           - revision
           - minor
           - major
+env:
+  version-number: "0"
 
 jobs:
   sync-branch:
@@ -34,7 +29,7 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: refs/heads/${{ github.event.inputs.release }}
+          ref: refs/heads/${{ github.ref }}
           repo: repo2
           owner: gemerich
           workflow: new-release.yml
@@ -55,7 +50,7 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: refs/heads/${{ github.event.inputs.release }}
+          ref: refs/heads/${{ github.ref }}
           repo: repo2
           owner: gemerich
           workflow: new-release.yml
@@ -77,20 +72,20 @@ jobs:
     steps:
       - name: Merges branches •• 🚀 ••
         uses: codex-/return-dispatch@v1
-        id: return_dispatch2
+        id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           ref: ${{ github.ref }}
           repo: repo2
           owner: gemerich
           workflow: merge-beta.yml
-      - name: Await Run ID ${{ steps.return_dispatch2.outputs.run_id }}
+      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           repo: repo2
           owner: gemerich
-          run_id: ${{ steps.return_dispatch2.outputs.run_id }}
+          run_id: ${{ steps.return_dispatch.outputs.run_id }}
           run_timeout_seconds: 300 # Optional
           poll_interval_ms: 5000 # Optional
   execute-tagging:
@@ -103,4 +98,34 @@ jobs:
           ref: beta
       - name: Set environment variables from project settings
         run: |
-          exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.build-type }}
+          exec .github/scripts/run.sh ${{ github.ref }} ${{ github.event.inputs.release-type }}
+      - name: Get version number
+        run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
+      - name: Test
+        run: echo ${{ env.version-number }}
+  update-version:
+    needs: [sync-branch, sync-branch2]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref }}
+      url: "${{ github.ref }} === beta ? http://asd.com : http://aaa.com"
+    steps:
+      - name: Merges branches •• 🚀 ••
+        uses: codex-/return-dispatch@v1
+        id: return_dispatch
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: ${{ github.ref }}
+          repo: repo2
+          owner: gemerich
+          workflow: final-step.yml
+          workflow_inputs: '{ "version_number": ${{ env.version-number }} }'
+      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
+        uses: Codex-/await-remote-run@v1.0.0
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repo: repo2
+          owner: gemerich
+          run_id: ${{ steps.return_dispatch.outputs.run_id }}
+          run_timeout_seconds: 300 # Optional
+          poll_interval_ms: 5000 # Optional
