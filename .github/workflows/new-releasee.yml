@@ -8,6 +8,13 @@ name: New Release •• 🚀 ••
 on:
   workflow_dispatch:
     inputs:
+      release:
+        type: choice
+        description: Release environemnt (If release is production build-type option will be ignored)
+        required: true
+        options:
+          - beta
+          - production
       build-type:
         type: choice
         description: Build type
@@ -29,7 +36,7 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: refs/heads/${{ github.ref }}
+          ref: refs/heads/${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
           workflow: new-release.yml
@@ -50,7 +57,7 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: refs/heads/${{ github.ref }}
+          ref: refs/heads/${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
           workflow: new-release.yml
@@ -98,7 +105,7 @@ jobs:
           ref: beta
       - name: Set environment variables from project settings
         run: |
-          exec .github/scripts/run.sh ${{ github.ref }} ${{ github.event.inputs.release-type }}
+          exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.release-type }}
       - name: Get version number
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
@@ -107,8 +114,8 @@ jobs:
     needs: [sync-branch, sync-branch2]
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref }}
-      url: "${{ github.ref }} === beta ? http://asd.com : http://aaa.com"
+      name: ${{ github.event.inputs.release }}
+      url: "${{ github.event.inputs.release }} === beta ? http://asd.com : http://aaa.com"
     steps:
       - name: Merges branches •• 🚀 ••
         uses: codex-/return-dispatch@v1
