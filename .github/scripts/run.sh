@@ -49,4 +49,4 @@ git add .
 git commit -m "Bump to ${newversion}"
 git tag "v-${1}-release-${newversion}"
 git push origin --tags
-echo $? || "${newversion}"
+echo "${newversion}" || $?
