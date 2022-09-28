@@ -37,9 +37,10 @@ fi
 
 # echo the new version number
 newversion=${major}.${minor}.${revision}${build}
+echo "new version: ${newversion} $2"
 
 search='("version":[[:space:]]*").+(")'
-replace='\1${newversion}\2'
+replace="\1${newversion}\2"
 
 sed -i -E "s/${search}/${replace}/g" "package.json"
 
@@ -49,4 +50,3 @@ git add .
 git commit -m "Bump to ${newversion}"
 git tag "v-${1}-release-${newversion}"
 git push origin --tags
-echo "${newversion}" || $? 
