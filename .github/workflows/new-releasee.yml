@@ -105,9 +105,11 @@ jobs:
           ref: beta
       - name: Set environment variables from project settings
         run: |
-          echo "version-number=${exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.build-type }}}" >> $GITHUB_ENV
+          exec .github/scripts/version-update.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.release-type }}
+      - name: Get version number
+        run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
-        run: echo $version-number
+        run: echo ${{ env.version-number }}
   update-version:
     needs: [sync-branch, sync-branch2]
     runs-on: ubuntu-latest
@@ -124,7 +126,7 @@ jobs:
           repo: repo2
           owner: gemerich
           workflow: final-step.yml
-          workflow_inputs: '{ "version_number": "1.2" }'
+          workflow_inputs: '{ "version_number": ${{ env.version-number }} }'
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
