@@ -42,7 +42,7 @@ echo "new version: ${newversion} $2"
 search='("version":[[:space:]]*").+(")'
 replace="\1${newversion}\2"
 
-sed -i -E "s/${search}/${replace}/g" "package.json"
+sed -i ".tmp" -E "s/${search}/${replace}/g" "$1"
 
 git config user.name github-actions
 git config user.email github-actions@github.com
