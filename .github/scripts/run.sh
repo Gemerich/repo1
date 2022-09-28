@@ -39,7 +39,7 @@ fi
 newversion=${major}.${minor}.${revision}${build}
 
 search='("version":[[:space:]]*").+(")'
-replace="\1${newversion}\2"
+replace=\1${newversion}\2
 
 sed -i -E "s/${search}/${replace}/g" "package.json"
 
