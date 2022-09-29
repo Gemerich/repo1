@@ -107,10 +107,6 @@ jobs:
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: development
       - name: merge
       - run: |
           git config user.name github-actions
