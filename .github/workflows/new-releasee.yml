@@ -114,9 +114,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update Pipeline library branch
-          commit_options: '--signoff'
           push_options: --force
-        id: update_pipeline_lib_branch
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           # git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
