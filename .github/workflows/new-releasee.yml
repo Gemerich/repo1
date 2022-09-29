@@ -113,7 +113,7 @@ jobs:
           git config user.email github-actions@github.com
           git checkout development
           git merge origin/beta
-          git push
+          git push --force
           echo $?
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
