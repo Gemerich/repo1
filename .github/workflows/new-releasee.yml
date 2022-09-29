@@ -112,7 +112,7 @@ jobs:
         if: always()
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
-          branch: ${{ github.event.repository.development }}
+          branch: development
           enforce_admins: false
       - name: Test
         run: |
@@ -124,7 +124,7 @@ jobs:
         if: always()
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
-          branch: ${{ github.event.repository.development }}
+          branch: development
           enforce_admins: true
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
