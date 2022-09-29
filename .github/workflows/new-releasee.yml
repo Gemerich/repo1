@@ -107,15 +107,13 @@ jobs:
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
-      - uses: actions/checkout@master
-      - name: Is a beta release? 💭 - Merge beta -> development
-        if: ${{ github.event.inputs.release }} == 'beta'
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: beta
-          target_branch: development
-          github_token: ${{ github.token }}
+      - name: Test
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout development
+          git merge origin/beta
+          echo $?
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
