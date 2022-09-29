@@ -109,12 +109,9 @@ jobs:
         run: echo ${{ env.version-number }}
       - name: Test
         run: |
-          git config user.name Gemerich
-          git config user.email gustavo@diviproject.com
           git checkout development
           git merge origin/beta
-          git push --force
-          echo $?
+          git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/gemerich/repo1.git
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
