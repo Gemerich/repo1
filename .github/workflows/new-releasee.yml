@@ -109,7 +109,6 @@ jobs:
         run: echo ${{ env.version-number }}
       - name: Temporarily disable "include administrators" branch protection
         uses: benjefferies/branch-protection-bot@master
-        if: always()
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
           branch: development
@@ -119,13 +118,6 @@ jobs:
           git checkout development
           git merge beta
           git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
-      - name: Enable "include administrators" branch protection
-        uses: benjefferies/branch-protection-bot@master
-        if: always()
-        with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
-          branch: development
-          enforce_admins: true
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
