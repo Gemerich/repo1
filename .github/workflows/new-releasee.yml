@@ -110,8 +110,8 @@ jobs:
       - name: Test
         run: |
           git checkout development
-          git merge origin/beta
-          git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/gemerich/repo1.git
+          git merge beta
+          git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
