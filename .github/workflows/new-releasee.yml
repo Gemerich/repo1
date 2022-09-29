@@ -107,18 +107,25 @@ jobs:
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
+      - name: Temporarily disable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@master
+        if: always()
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+          branch: ${{ github.event.repository.development }}
+          enforce_admins: false
       - name: Test
         run: |
           git checkout development
           git merge beta
-      - uses: stefanzweifel/git-auto-commit-action@v4
+          git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
+      - name: Enable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@master
+        if: always()
         with:
-          commit_message: Update Pipeline library branch
-          push_options: --force
-          repository: development
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          # git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+          branch: ${{ github.event.repository.development }}
+          enforce_admins: true
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
