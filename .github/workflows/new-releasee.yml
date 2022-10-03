@@ -130,7 +130,7 @@ jobs:
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. ${nl}"
-          gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }}
+          gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }} || true
       - name: Approve PR
         env:
           GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
