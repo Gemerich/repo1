@@ -116,7 +116,7 @@ jobs:
         with:
           commit_message: Bump to ${{ env.version-number }}
           file_pattern: |
-            **/package.json
+            package.json
 
       - name: Test
         run: |
