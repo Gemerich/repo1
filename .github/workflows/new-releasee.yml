@@ -113,7 +113,9 @@ jobs:
           name: "Gemerich"
           email: gustavo@diviproject.org
       - name: Create release branch
-        run: git checkout -b release/${{ env.version-number }}
+        run: | 
+          git checkout -b release/${{ env.version-number }}
+          git push --set-upstream origin release/${{ env.version-number }}
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Bump to ${{ env.version-number }}
