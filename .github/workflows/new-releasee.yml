@@ -112,6 +112,12 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           name: "Gemerich"
           email: gustavo@diviproject.org
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Bump to ${{ env.version-number }}
+          file_pattern: |
+            **/package.json
+
       - name: Test
         run: |
           git checkout development
