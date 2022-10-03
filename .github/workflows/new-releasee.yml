@@ -114,7 +114,8 @@ jobs:
           email: gustavo@diviproject.org
       - name: Create release branch
         run: | 
-          git checkout --track release/${{ env.version-number }}
+          git checkout -b release/${{ env.version-number }}
+          git push --set-upstream origin release/${{ env.version-number }}
           git pull
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
