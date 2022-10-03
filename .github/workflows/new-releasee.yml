@@ -112,11 +112,36 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           name: "Gemerich"
           email: gustavo@diviproject.org
+      - name: Create release branch
+        run: git checkout -b release/${{ env.version-number }}
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Bump to ${{ env.version-number }}
           file_pattern: |
             package.json
+      - name: Push new branch
+        run: git push origin release/${{ env.version-number }}
+      - name: Create pull request release -> beta
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          nl=$'\n'
+          body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
+          https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. ${nl}"
+          gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }}
+      - name: Approve PR
+        run: |
+          gh pr review release/${{ env.version-number }} --approve
+
+      - name: Merge release -> beta
+        run: |
+          gh pr merge release/${{ env.version-number }} --delete-branch --merge
+
+      - name: Merge release -> beta
+        run: |
+          git checkout beta         
+          git tag "v-${{ github.event.inputs.build-type }}-release-${{ env.version-number }}"
+          git push origin --tags
 
       - name: Test
         run: |
