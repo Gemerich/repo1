@@ -137,7 +137,7 @@ jobs:
           gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }} || true
       - name: Approve PR
         env:
-          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.PR_APPROVE_BOT_PAT }}
         run: |
           gh pr review release/${{ env.version-number }} --approve
 
