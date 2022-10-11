@@ -189,11 +189,11 @@ jobs:
         id: return_dispatch
         with:
           token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
           workflow: final-step.yml
-          workflow_inputs: '{ "version_number": "${{ env.version-number }}",  "build-type": "${{ env.build-type }},  "release": "${{ github.event.inputs.release }}" }'
+          workflow_inputs: '{ "version_number": "${{ env.version-number }}",  "build-type": "${{ env.build-type }}",  "release": "${{ github.event.inputs.release }}" }'
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
