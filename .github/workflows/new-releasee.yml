@@ -119,7 +119,6 @@ jobs:
           git checkout -b release/${{ env.version-number }}
           git push --set-upstream --force origin release/${{ env.version-number }}
       - name: Commit changelog and manifest files
-        id: make-commit
         run: |
           git config user.name "GitHub actions"
           git config user.email noreply@github.com
