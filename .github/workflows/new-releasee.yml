@@ -107,13 +107,15 @@ jobs:
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
-      - uses: fregante/setup-git-token@v1
-        with:
-          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-          name: "autodeployment-bot"
-          email: autodeployment-bot@diviproject.org
+      # - uses: fregante/setup-git-token@v1
+      #   with:
+      #     token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+      #     name: "autodeployment-bot"
+      #     email: autodeployment-bot@diviproject.org
       - name: Create release branch
-        run: | 
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+        run: |
           git checkout -b release/${{ env.version-number }}
           git push --set-upstream --force origin release/${{ env.version-number }}
       - uses: stefanzweifel/git-auto-commit-action@v4
@@ -142,7 +144,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr merge release/${{ env.version-number }} --delete-branch --merge
-          
+
       - name: Create pull request beta -> development
         env:
           GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
@@ -165,7 +167,7 @@ jobs:
 
       # - name: Merge release -> beta
       #   run: |
-      #     git checkout beta         
+      #     git checkout beta
       #     git tag "v-${{ github.event.inputs.build-type }}-release-${{ env.version-number }}"
       #     git push origin --tags
 
