@@ -35,7 +35,7 @@ jobs:
         uses: codex-/return-dispatch@v1
         id: return_dispatch
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           ref: refs/heads/${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
@@ -43,7 +43,7 @@ jobs:
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           repo: repo2
           owner: gemerich
           run_id: ${{ steps.return_dispatch.outputs.run_id }}
@@ -56,7 +56,7 @@ jobs:
         uses: codex-/return-dispatch@v1
         id: return_dispatch
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           ref: refs/heads/${{ github.event.inputs.release }}
           repo: repo2
           owner: gemerich
@@ -64,7 +64,7 @@ jobs:
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           repo: repo2
           owner: gemerich
           run_id: ${{ steps.return_dispatch.outputs.run_id }}
@@ -78,7 +78,7 @@ jobs:
         uses: codex-/return-dispatch@v1
         id: return_dispatch
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           ref: ${{ github.ref }}
           repo: repo2
           owner: gemerich
@@ -86,7 +86,7 @@ jobs:
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           repo: repo2
           owner: gemerich
           run_id: ${{ steps.return_dispatch.outputs.run_id }}
@@ -109,7 +109,7 @@ jobs:
         run: echo ${{ env.version-number }}
       - uses: fregante/setup-git-token@v1
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           name: "Gemerich"
           email: gustavo@diviproject.org
       - name: Create release branch
@@ -125,7 +125,7 @@ jobs:
         run: git push origin release/${{ env.version-number }}
       - name: Create pull request release -> beta
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
@@ -133,19 +133,19 @@ jobs:
           gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }} || true
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr review release/${{ env.version-number }} --approve
 
       - name: Merge release -> beta
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr merge release/${{ env.version-number }} --delete-branch --merge
           
       - name: Create pull request beta -> development
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
@@ -153,13 +153,13 @@ jobs:
           gh pr create --title "Release ${{ env.version-number }} beta -> development" --body "$body" --label release --base development --head release/${{ env.version-number }}
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.PR_APPROVE_BOT_PAT }}
         run: |
           gh pr review release/${{ env.version-number }} --approve
 
       - name: Merge release -> beta
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr merge release/${{ env.version-number }} --merge
 
@@ -173,7 +173,7 @@ jobs:
       #   run: |
       #     git checkout development
       #     git merge beta
-      #     git push --force https://${{ secrets.ACCESS_TOKEN }}@github.com/Gemerich/repo1.git
+      #     git push --force https://${{ secrets.AUTODEPLOYMENT_BOT_PAT }}@github.com/Gemerich/repo1.git
   update-version-other-repos:
     needs: [sync-branch, sync-branch2, execute-tagging]
     runs-on: ubuntu-latest
@@ -185,7 +185,7 @@ jobs:
         uses: codex-/return-dispatch@v1
         id: return_dispatch
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           ref: ${{ github.ref }}
           repo: repo2
           owner: gemerich
@@ -194,7 +194,7 @@ jobs:
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
           repo: repo2
           owner: gemerich
           run_id: ${{ steps.return_dispatch.outputs.run_id }}
