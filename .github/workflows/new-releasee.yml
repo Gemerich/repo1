@@ -165,11 +165,11 @@ jobs:
         run: |
           gh pr merge release/${{ env.version-number }} --delete-branch --merge
 
-      # - name: Merge release -> beta
-      #   run: |
-      #     git checkout beta
-      #     git tag "v-${{ github.event.inputs.build-type }}-release-${{ env.version-number }}"
-      #     git push origin --tags
+      - name: Merge release -> beta
+        run: |
+          git checkout beta
+          git tag "v-${{ github.event.inputs.build-type }}-release-${{ env.version-number }}"
+          git push origin --tags
 
       # - name: Test
       #   run: |
@@ -192,7 +192,7 @@ jobs:
           repo: repo2
           owner: gemerich
           workflow: final-step.yml
-          workflow_inputs: '{ "version_number": "${{ github.event.inputs.version-number }}",  "release": "${{ github.event.inputs.release }}" }'
+          workflow_inputs: '{ "version_number": "${{ env.version-number }}",  "release": "${{ github.event.inputs.release }}" }'
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
