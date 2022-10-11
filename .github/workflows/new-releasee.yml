@@ -124,7 +124,7 @@ jobs:
           git commit --message "Prepare release ${{ env.version-number }}"
           echo "::set-output name=commit::$(git rev-parse HEAD)"
       - name: Push new branch
-        run: git push origin release/${{ env.version-number }}
+        run: git push https://${{ secrets.AUTODEPLOYMENT_BOT_PAT }}@github.com/autodeployment-bot/repo1.git release/${{ env.version-number }}
       - name: Create pull request release -> beta
         env:
           GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
