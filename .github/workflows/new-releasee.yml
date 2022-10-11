@@ -118,11 +118,14 @@ jobs:
         run: |
           git checkout -b release/${{ env.version-number }}
           git push --set-upstream --force origin release/${{ env.version-number }}
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Bump to ${{ env.version-number }}
-          file_pattern: |
-            package.json
+      - name: Commit changelog and manifest files
+        id: make-commit
+        run: |
+          git config user.name "GitHub actions"
+          git config user.email noreply@github.com
+          git add package.json
+          git commit --message "Prepare release ${{ env.version-number }}"
+          echo "::set-output name=commit::$(git rev-parse HEAD)"
       - name: Push new branch
         run: git push origin release/${{ env.version-number }}
       - name: Create pull request release -> beta
