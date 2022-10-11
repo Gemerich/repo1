@@ -125,7 +125,7 @@ jobs:
         run: git push origin release/${{ env.version-number }}
       - name: Create pull request release -> beta
         env:
-          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
@@ -133,19 +133,19 @@ jobs:
           gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }} || true
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr review release/${{ env.version-number }} --approve
 
       - name: Merge release -> beta
         env:
-          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr merge release/${{ env.version-number }} --delete-branch --merge
           
       - name: Create pull request beta -> development
         env:
-          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
@@ -159,7 +159,7 @@ jobs:
 
       - name: Merge release -> beta
         env:
-          GH_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
           gh pr merge release/${{ env.version-number }} --merge
 
