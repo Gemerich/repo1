@@ -110,8 +110,8 @@ jobs:
       - uses: fregante/setup-git-token@v1
         with:
           token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-          name: "Gemerich"
-          email: gustavo@diviproject.org
+          name: "autodeployment-bot"
+          email: autodeployment-bot@diviproject.org
       - name: Create release branch
         run: | 
           git checkout -b release/${{ env.version-number }}
