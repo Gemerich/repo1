@@ -113,7 +113,7 @@ jobs:
         run: echo "::set-output name=version-number::${{ env.version-number }}"
       - id: url
         name: Test2
-        run: echo "::set-output name=url::$([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")"
+        run: echo "::set-output name=url::$([ ${{ github.event.inputs.release }} == 'beta' ] && echo http://asd.com || echo http://aaa.com)"
       # - uses: fregante/setup-git-token@v1
       #   with:
       #     token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
