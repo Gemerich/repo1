@@ -110,6 +110,9 @@ jobs:
       - id: version
         name: Test
         run: echo "::set-output name=version-number::${{ env.version-number }}"
+      - id: url
+        name: Test2
+        run: echo "::set-output name=url::$([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")"        
       # - uses: fregante/setup-git-token@v1
       #   with:
       #     token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
@@ -185,7 +188,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.release }}
-      url: $([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")
+      url: ${{ needs.execute-tagging.outputs.url }}
     steps:
       - name: Merges branches •• 🚀 ••
         uses: codex-/return-dispatch@v1
