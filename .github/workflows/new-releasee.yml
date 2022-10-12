@@ -194,7 +194,7 @@ jobs:
           owner: gemerich
           workflow: final-step.yml
           workflow_inputs: |
-            {"version_number": "${{ env.version-number }}",  "build-type": "${{ github.event.inputs.build-type }}",  "release": "${{ github.event.inputs.release }}"}
+            {"version_number": "123",  "build-type": "${{ github.event.inputs.build-type }}",  "release": "${{ github.event.inputs.release }}"}
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
