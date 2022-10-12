@@ -106,7 +106,7 @@ jobs:
         run: |
           exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.build-type }}
       - id: version
-      - name: Get version number
+        name: Get version number
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.version-number }}
