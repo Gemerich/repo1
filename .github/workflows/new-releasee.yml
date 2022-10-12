@@ -95,7 +95,7 @@ jobs:
   execute-tagging:
     outputs:
       version-number: ${{steps.version.outputs.version-number}}
-      url: ${{steps.version.outputs.url}}
+      url: ${{steps.url.outputs.url}}
     needs: [merge-branches]
     runs-on: ubuntu-latest
     steps:
@@ -108,9 +108,11 @@ jobs:
           exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.build-type }}
       - name: Get version number
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
-      - name: Test
+      - id: version
+        name: Test
         run: echo "::set-output name=version-number::${{ env.version-number }}"
-      - name: Test2
+      - id: url
+        name: Test2
         run: echo "::set-output name=url::$([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")"
       # - uses: fregante/setup-git-token@v1
       #   with:
