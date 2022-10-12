@@ -93,6 +93,8 @@ jobs:
           run_timeout_seconds: 300 # Optional
           poll_interval_ms: 5000 # Optional
   execute-tagging:
+    outputs:
+      version-number: ${{steps.version.outputs.version-number}}
     needs: [merge-branches]
     runs-on: ubuntu-latest
     steps:
@@ -103,6 +105,7 @@ jobs:
       - name: Set environment variables from project settings
         run: |
           exec .github/scripts/run.sh ${{ github.event.inputs.release }} ${{ github.event.inputs.build-type }}
+      - id: version
       - name: Get version number
         run: echo "version-number=$(cat ./package.json | grep -m 1 version | sed 's/[^0-9.]//g')" >> $GITHUB_ENV
       - name: Test
@@ -194,7 +197,7 @@ jobs:
           owner: gemerich
           workflow: final-step.yml
           workflow_inputs: |
-            {"version_number": "123",  "build-type": "${{ github.event.inputs.build-type }}",  "release": "${{ github.event.inputs.release }}"}
+            {"version_number": "${{ needs.execute-tagging.outputs.version-number }}",  "build-type": "${{ github.event.inputs.build-type }}",  "release": "${{ github.event.inputs.release }}"}
       - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
         uses: Codex-/await-remote-run@v1.0.0
         with:
