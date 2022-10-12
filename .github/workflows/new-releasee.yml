@@ -185,7 +185,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.release }}
-      url: "$([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")"
+      url: $([ ${{ github.event.inputs.release }} === beta ] && echo \"http://asd.com\" || echo \"http://aaa.com\")
     steps:
       - name: Merges branches •• 🚀 ••
         uses: codex-/return-dispatch@v1
