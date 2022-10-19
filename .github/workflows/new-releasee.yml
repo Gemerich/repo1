@@ -119,21 +119,21 @@ jobs:
       #     token: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
       #     name: "autodeployment-bot"
       #     email: autodeployment-bot@diviproject.org
-      - name: Create release branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-        run: |
-          git checkout -b release/${{ env.version-number }}
-          git push --set-upstream --force origin release/${{ env.version-number }}
-      - name: Commit package.json
-        run: |
-          git config user.name "autodeployment-bot"
-          git config user.email autodeployment-bot@diviproject.com
-          git add package.json
-          git commit --message "Prepare release ${{ env.version-number }}"
-          echo "::set-output name=commit::$(git rev-parse HEAD)"
-      - name: Push new branch
-        run: git push origin release/${{ env.version-number }}
+      # - name: Create release branch
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+      #   run: |
+      #     git checkout -b release/${{ env.version-number }}
+      #     git push --set-upstream --force origin release/${{ env.version-number }}
+      # - name: Commit package.json
+      #   run: |
+      #     git config user.name "autodeployment-bot"
+      #     git config user.email autodeployment-bot@diviproject.com
+      #     git add package.json
+      #     git commit --message "Prepare release ${{ env.version-number }}"
+      #     echo "::set-output name=commit::$(git rev-parse HEAD)"
+      # - name: Push new branch
+      #   run: git push origin release/${{ env.version-number }}
       - name: Create pull request release -> beta
         env:
           GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
@@ -141,36 +141,36 @@ jobs:
           nl=$'\n'
           body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. ${nl}"
-          gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head release/${{ env.version-number }} || true
+          gh pr create --title "Release ${{ env.version-number }} release -> beta" --body "$body" --label release --base beta --head development
       - name: Approve PR
         env:
           GITHUB_TOKEN: ${{ secrets.PR_APPROVE_BOT_PAT }}
         run: |
-          gh pr review release/${{ env.version-number }} --approve
+          gh pr review development --approve
       - name: Merge release -> beta
         env:
           GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
         run: |
-          gh pr merge release/${{ env.version-number }} --merge
+          gh pr merge development --merge
 
-      - name: Create pull request release -> development
-        env:
-          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-        run: |
-          nl=$'\n'
-          body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
-          https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. ${nl}"
-          gh pr create --title "Release ${{ env.version-number }} release -> development" --body "$body" --label release --base development --head release/${{ env.version-number }} || true
-      - name: Approve PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.PR_APPROVE_BOT_PAT }}
-        run: |
-          gh pr review release/${{ env.version-number }} --approve
-      - name: Merge release -> development
-        env:
-          GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
-        run: |
-          gh pr merge release/${{ env.version-number }} --delete-branch --merge
+      # - name: Create pull request release -> development
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+      #   run: |
+      #     nl=$'\n'
+      #     body="Hi @${{ github.actor }}! ${nl}This PR was created in response to a manual trigger of the release workflow here: \
+      #     https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. ${nl}"
+      #     gh pr create --title "Release ${{ env.version-number }} release -> development" --body "$body" --label release --base development --head release/${{ env.version-number }} || true
+      # - name: Approve PR
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PR_APPROVE_BOT_PAT }}
+      #   run: |
+      #     gh pr review release/${{ env.version-number }} --approve
+      # - name: Merge release -> development
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.AUTODEPLOYMENT_BOT_PAT }}
+      #   run: |
+      #     gh pr merge release/${{ env.version-number }} --delete-branch --merge
 
       - name: Tag
         run: |
